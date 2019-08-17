@@ -1,5 +1,6 @@
 {
   "usingComponents": {
     "y-playlist":"/components/playlist/playlist"
-  }
+  },
+  "enablePullDownRefresh": true
 }
