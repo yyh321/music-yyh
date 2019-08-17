@@ -88,7 +88,8 @@ Page({
       name: 'music',
       data: {
         start: this.data.playlist.length,
-        count: MAX_LIMIT
+        count: MAX_LIMIT,
+        $url:'playlist' // $url固定写法，后面值对应的是router路由名称
       }
     }).then((res) => {
       this.setData({
