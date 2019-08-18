@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "y-musiclist":"/components/musiclist/musiclist"
+  }
+}
