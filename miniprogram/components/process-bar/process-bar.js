@@ -3,6 +3,7 @@
 let movableAreaWidth = 0
 let movableViewWidth = 0
 let currentSec = -1 // 当前的秒数
+let duration = 0 //当前歌曲总时长
 let backgroundAudioManager = wx.getBackgroundAudioManager()
 Component({
   /**
@@ -34,6 +35,27 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    onChange(event){
+      console.log(event)
+      // touch: 拖动 '':setData，官方文档有介绍
+      if(event.detail.source == 'touch') {
+        this.data.progress = event.detail.x / (movableAreaWidth - movableViewWidth) * 100
+        this.data.movableDis = event.detail.x
+      }
+    },
+    onTouchEnd(){
+      // 当change时间触发完成后再设置值，否则影响性能，卡顿
+     const curTimeFmt = this._dateFormat(Math.floor(backgroundAudioManager.currentTime))
+      this.setData({
+        progress: this.data.progress,
+        movableDis: this.data.movableDis,
+        ['showTime.currentTime']: `${curTimeFmt.min}:${curTimeFmt.sec}`
+      })
+
+      // 设置歌曲到指定时间上
+      backgroundAudioManager.seek(duration * this.data.progress / 100)
+
+    },
     _getMovableDis(){
       const query = this.createSelectorQuery()
       query.select('.movable-area').boundingClientRect()
@@ -107,7 +129,7 @@ Component({
     },
 
     _setTime() {
-      const duration = backgroundAudioManager.duration
+      duration = backgroundAudioManager.duration
       const formatTimeObj = this._dateFormat(duration)
       
       // 为对象的某个属性赋值，用[]方式
