@@ -14,6 +14,9 @@
     "navigationBarTitleText": "音乐",
     "navigationBarTextStyle": "white"
   },
+  "requiredBackgroundModes":[
+    "audio"
+  ],
   "tabBar":{
     "color": "#474747",
     "selectedColor":"#d43c43",

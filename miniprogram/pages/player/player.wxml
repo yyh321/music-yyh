@@ -9,6 +9,6 @@
 
 <view class="control">
   <text class="iconfont icon-shangyishoushangyige"></text>
-  <text class="iconfont icon-bofang"></text>
+  <text class="iconfont {{isPlaying?'icon-plus-pause':'icon-bofang'}}"></text>
   <text class="iconfont icon-xiayigexiayishou"></text>
 </view>

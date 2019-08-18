@@ -76,7 +76,7 @@
 .icon-shangyishoushangyige,.icon-xiayigexiayishou {
   font-size: 80rpx;
 }
-.icon-bofang {
+.icon-bofang,.icon-plus-pause {
   font-size: 120rpx;
   margin: 0 50rpx;
 }
