@@ -23,6 +23,7 @@ Page({
   },
 
   _loadMusicDetail(musicId){
+    backgroundAudioManager.stop()
     let music = musiclist[nowPlayingIndex]
     wx.setNavigationBarTitle({
       title:music.name
@@ -57,6 +58,32 @@ Page({
         isPlaying:true
       })
     })
+  },
+
+  togglePlaying(){
+    if(this.data.isPlaying) {
+      backgroundAudioManager.pause()
+    } else {
+      backgroundAudioManager.play()
+    }
+
+    this.setData({
+      isPlaying: !this.data.isPlaying
+    })
+  },
+  onPrev(){
+    nowPlayingIndex--
+    if(nowPlayingIndex < 0) {
+      nowPlayingIndex = musiclist.length - 1
+    }
+    this._loadMusicDetail(musiclist[nowPlayingIndex].id)
+  },
+  onNext(){
+    nowPlayingIndex++
+    if(nowPlayingIndex === musiclist.length) {
+      nowPlayingIndex = 0
+    }
+    this._loadMusicDetail(musiclist[nowPlayingIndex].id)
   },
 
   /**
