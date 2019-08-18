@@ -1,3 +1,5 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "y-process-bar":"/components/process-bar/process-bar"
+  }
 }
