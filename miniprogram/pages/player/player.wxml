@@ -3,10 +3,11 @@
 
 <view class="player-info">
   <!-- 封面 -->
-  <view class="player-disc {{isPlaying?'play':''}}">
+  <view class="player-disc {{isPlaying?'play':''}}" hidden="{{isLyricShow}}" bindtap="onChangeLyricShow">
     <image class="player-img rotation {{isPlaying?'':'rotation-paused'}} " src="{{picUrl}}"></image>
   </view>
-
+  <!-- 歌词 -->
+  <y-lyric isLyricShow="{{!isLyricShow}}" bindtap="onChangeLyricShow" lyric="{{lyric}}" />
   <!-- 进度条 -->
   <view class="process-bar">
     <y-process-bar bind:musicEnd="onNext" />

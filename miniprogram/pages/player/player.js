@@ -10,7 +10,9 @@ Page({
    */
   data: {
     picUrl:'',
-    isPlaying:false
+    isPlaying:false,
+    isLyricShow: false, // 当前是否显示歌词
+    lyric:'',
   },
 
   /**
@@ -45,8 +47,7 @@ Page({
         $url:'musicUrl'
       }
     }).then((res)=>{
-      console.log(JSON.parse(res.result))
-      wx.hideLoading()
+      
       let result = JSON.parse(res.result)
       backgroundAudioManager.src = result.data[0].url
       backgroundAudioManager.title = music.name
@@ -56,6 +57,27 @@ Page({
 
       this.setData({
         isPlaying:true
+      })
+
+      //加载歌词
+      wx.cloud.callFunction({
+        name:'music',
+        data:{
+          musicId,
+          $url:'lyric'
+        }
+      }).then((res) => {
+        wx.hideLoading()
+        console.log(res)
+        let lyric = '暂无歌词'
+        const lrc = JSON.parse(res.result).lrc
+        if(lrc) {
+          lyric = lrc.lyric
+        }
+        //设置歌词
+        this.setData({
+          lyric
+        })
       })
     })
   },
@@ -84,6 +106,12 @@ Page({
       nowPlayingIndex = 0
     }
     this._loadMusicDetail(musiclist[nowPlayingIndex].id)
+  },
+
+  onChangeLyricShow() {
+    this.setData({
+      isLyricShow: !this.data.isLyricShow
+    })
   },
 
   /**
