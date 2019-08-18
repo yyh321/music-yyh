@@ -68,7 +68,7 @@ Page({
         }
       }).then((res) => {
         wx.hideLoading()
-        console.log(res)
+ 
         let lyric = '暂无歌词'
         const lrc = JSON.parse(res.result).lrc
         if(lrc) {

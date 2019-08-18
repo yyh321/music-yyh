@@ -1,3 +1,10 @@
-<scroll-view hidden="{{isLyricShow}}">
-  歌词
-</scroll-view>
+<scroll-view hidden="{{isLyricShow}}" class="lyric-scroll">
+  <view class="lyric-panel">
+    <block wx:for="{{lrcList}}" wx:key="item">
+      <view class="lyric">
+        {{item.lrc}}
+      </view>
+    </block>
+  </view>
+
+</scroll-view>""
