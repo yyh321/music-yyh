@@ -11,7 +11,7 @@ Component({
    * 组件的属性列表
    */
   properties: {
-
+    isSame: Boolean
   },
 
   /**
@@ -28,6 +28,10 @@ Component({
   // 组件声明周期
   lifetimes: {
     ready() {
+      if(this.properties.isSame && this.data.showTime.totalTime == '00:00') {
+        // 说明是同一首
+        this._setTime()
+      }
       this._getMovableDis()
       this._bindBGMEvent()
     }
@@ -74,14 +78,16 @@ Component({
       backgroundAudioManager.onPlay(() => {
         // 小程序有个坑,在onTouchEnd里有时候还会触发onchange事件，isMoving=true,导致进度条一直得不到更新,所以在这里也有重新设置一下isMoving
         isMoving = false
+
+        this.triggerEvent('musicPlay')
       })
 
       backgroundAudioManager.onStop(() => {
-
+        
       })
 
       backgroundAudioManager.onPause(() => {
-
+        this.triggerEvent('musicPause')
       })
 
       backgroundAudioManager.onWaiting(() => {

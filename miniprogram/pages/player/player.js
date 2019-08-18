@@ -3,6 +3,8 @@ let musiclist = []
 let nowPlayingIndex = 0
 // 获取全局唯一的音频管理器
 const backgroundAudioManager = wx.getBackgroundAudioManager()
+
+const app = getApp()
 Page({
 
   /**
@@ -13,6 +15,7 @@ Page({
     isPlaying:false,
     isLyricShow: false, // 当前是否显示歌词
     lyric:'',
+    isSame:false, //是否是同一首
   },
 
   /**
@@ -25,7 +28,21 @@ Page({
   },
 
   _loadMusicDetail(musicId){
-    backgroundAudioManager.stop()
+    if (musicId == app.getPlayMusicId()) {
+      // 判断是否是同一首
+      this.setData({
+        isSame: true
+      })
+    } else {
+      this.setData({
+        isSame: false
+      })
+    }
+    if(!this.data.isSame) {
+      // 不是同一首歌，要停止
+      backgroundAudioManager.stop()
+    }
+    
     let music = musiclist[nowPlayingIndex]
     wx.setNavigationBarTitle({
       title:music.name
@@ -39,6 +56,8 @@ Page({
       title: '加载中',
     })
     
+    app.setPlayMusicId(musicId)
+
     // 加载音乐
     wx.cloud.callFunction({
       name:'music',
@@ -49,12 +68,21 @@ Page({
     }).then((res)=>{
       
       let result = JSON.parse(res.result)
-      backgroundAudioManager.src = result.data[0].url
-      backgroundAudioManager.title = music.name
-      backgroundAudioManager.coverImgUrl = music.al.picUrl
-      backgroundAudioManager.singer = music.ar[0].name
-      backgroundAudioManager.epname = music.al.name
-
+      if(result.data[0].url=='null') {
+        // 会员播放
+        wx.showToast({
+          title: '无权限播放',
+        })
+        return 
+      }
+      if(!this.data.isSame) {
+        backgroundAudioManager.src = result.data[0].url
+        backgroundAudioManager.title = music.name
+        backgroundAudioManager.coverImgUrl = music.al.picUrl
+        backgroundAudioManager.singer = music.ar[0].name
+        backgroundAudioManager.epname = music.al.name
+      }
+      
       this.setData({
         isPlaying:true
       })
@@ -117,6 +145,18 @@ Page({
   timeUpdate(event){
     // 获取组件,在组件内定义一个update方法，将时间传递过去,selectComponent是微信提供获取组件的方法
     this.selectComponent('.lyric').update(event.detail.currentTime)
+  },
+
+  onPlay(){
+    this.setData({
+      isPlaying: true
+    })
+  },
+
+  onPause(){
+    this.setData({
+      isPlaying: false
+    })
   },
 
   /**
