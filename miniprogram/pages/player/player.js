@@ -113,6 +113,11 @@ Page({
       isLyricShow: !this.data.isLyricShow
     })
   },
+  // 时间联动触发函数
+  timeUpdate(event){
+    // 获取组件,在组件内定义一个update方法，将时间传递过去,selectComponent是微信提供获取组件的方法
+    this.selectComponent('.lyric').update(event.detail.currentTime)
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成

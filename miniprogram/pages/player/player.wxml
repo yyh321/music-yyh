@@ -7,10 +7,10 @@
     <image class="player-img rotation {{isPlaying?'':'rotation-paused'}} " src="{{picUrl}}"></image>
   </view>
   <!-- 歌词 -->
-  <y-lyric isLyricShow="{{!isLyricShow}}" bindtap="onChangeLyricShow" lyric="{{lyric}}" />
+  <y-lyric class="lyric" isLyricShow="{{!isLyricShow}}" bindtap="onChangeLyricShow" lyric="{{lyric}}" />
   <!-- 进度条 -->
   <view class="process-bar">
-    <y-process-bar bind:musicEnd="onNext" />
+    <y-process-bar bind:musicEnd="onNext" bind:timeUpdate="timeUpdate" />
   </view>
   <!-- 控制面板 -->
   <view class="control">
