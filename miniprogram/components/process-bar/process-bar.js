@@ -2,6 +2,7 @@
 
 let movableAreaWidth = 0
 let movableViewWidth = 0
+let currentSec = -1 // 当前的秒数
 let backgroundAudioManager = wx.getBackgroundAudioManager()
 Component({
   /**
@@ -40,8 +41,7 @@ Component({
       query.exec((rect)=>{
         movableAreaWidth = rect[0].width
         movableViewWidth = rect[1].width
-        console.log(111)
-        console.log(movableAreaWidth, movableViewWidth)
+        
       })
     },
 
@@ -76,6 +76,22 @@ Component({
       })
 
       backgroundAudioManager.onTimeUpdate(() => {
+        const currentTime = backgroundAudioManager.currentTime
+        const duration = backgroundAudioManager.duration
+        const currentTimeFmt = this._dateFormat(currentTime)
+
+        // 优化处理，每一秒更改设置一次即可，因为一秒内，时间会更改4次，太频繁，影响性能
+        const sec = currentTime.toString().split('.')[0]
+        if( sec != currentSec) {
+          this.setData({
+            movableDis: (movableAreaWidth - movableViewWidth) * currentTime / duration,
+            progress: currentTime / duration * 100,
+            ['showTime.currentTime']: `${currentTimeFmt.min}:${currentTimeFmt.sec}`,
+          })
+
+          currentSec = sec
+        }
+        
 
       })
 
