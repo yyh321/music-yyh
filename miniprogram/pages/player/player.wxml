@@ -9,7 +9,7 @@
 
   <!-- 进度条 -->
   <view class="process-bar">
-    <y-process-bar />
+    <y-process-bar bind:musicEnd="onNext" />
   </view>
   <!-- 控制面板 -->
   <view class="control">
